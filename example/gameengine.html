@@ -34,13 +34,12 @@
 </div>
 
 
-
-
-<script type="text/javascript" src="scene.js"></script>
-<script type="text/javascript" src="helpers.js"></script>
-<script type="text/javascript" src="sound.js"></script>
-<script type="text/javascript" src="controls.js"></script>
-<script type="text/javascript" src="engine.js"></script>
+<script type="text/javascript" src="../src/helpers.js"></script>
+<script type="text/javascript" src="../src/objects.js"></script>
+<script type="text/javascript" src="../src/scene.js"></script>
+<script type="text/javascript" src="../src/sound.js"></script>
+<script type="text/javascript" src="../src/controls.js"></script>
+<script type="text/javascript" src="../src/engine.js"></script>
 
 <script type="text/javascript">
 
@@ -48,104 +47,29 @@
 var PingPong = new atGame({
 	canvas: 'game1',
 	mainScene: 0,
-	cursor: false
+	cursor: true
 });
 
 PingPong.init = function() {
-	
+		
 }
 
 var welcomeScene = SceneManager.createScene();
 
+var rect1 = new atgoRectangle(100, 10, 240, 150);
+var circ1 = new atgoCircle(100, 240, 155);
+
+var r = 0;
+
 welcomeScene.init = function() {
-	var angle = 40;
-	this.scale_x = Math.cos(angle);
-	this.scale_y = Math.sin(angle);
-	this.velocity_x = this.scale_x * this.speed;
-	this.velocity_y = this.scale_y * this.speed;
+	this.addObject(circ1);
 
-	this.gravity = 0;
-	this.speed = 1 * 0.60;
-	this.acceleration = 1;
-	this.moving = true;
-
-	this.posX = 250;
-	this.posY = 200;
-
-	//this.shotSound = SoundManager.load('shotgun.mp3');
-
-	SoundManager.load('background.oga').play();
-	this.shotSound = SoundManager.load('shotgun.mp3');
-
-
-	this.rotateAngle = 0;
-
-
-
-	this.playerBar = {
-		x: 0,
-		y: 20
-	};
-	this.cpuBar = {
-		x: 0,
-		y: 450
-	};
-
-	this.ball = {
-		radius: 50,
-		x:	500 - this.radius,
-		y: 500 - this.radius
-	};
+	this.addObject(rect1);
 }
 
 welcomeScene.update = function() {
-	
-	/*if ((this.posX < this.screen.Width() - 100) && this.direction === 0) {
-		this.posX += 1;
-	} else {
-		this.direction = 1;
-		this.posX -= 1;
-		if (this.posX === 0) {
-			this.direction = 0;
-		}
-	}*/
-	
-this.speed = this.speed + this.acceleration;
-this.velocity_x = this.speed * this.scale_x;
-this.velocity_y = this.speed * this.scale_y;
-
-this.posX = this.posX + this.velocity_x;
-this.posY = this.posY + this.velocity_y;
-
-
-this.playerBar.x = Controls.mouseX - (300 / 2);
-
-
-if (this.barPosX <= 0 || this.barPosX >= (this.screen.width() - 300)) {
-	//this.shotSound.play();	
-
-}
-
-if (this.playerBar.x <= 0) {
-	this.playerBar.x = 0;	
-}
-
-	if (this.playerBar.x >= (this.screen.width() - 300)) {
-		this.playerBar.x = (this.screen.width() - 300);
-	}
-}
-
-welcomeScene.draw = function() {
-	this.screen.canvas.fillStyle = 'green';
-	this.screen.canvas.fillRect(0, 0, this.screen.width(), this.screen.height());
-	this.screen.canvas.fillStyle = 'black';
-	this.screen.canvas.fillStyle = 'white';
-	this.screen.canvas.fillRect(this.posX, this.posY , 100, 100);
-	this.screen.canvas.fillRect(this.barPosX, this.barPosY , 300, 30);
-	this.screen.canvas.fillRect(this.playerBar.x, this.playerBar.y , 300, 30);
-	
-	//Cpu
-	this.screen.canvas.fillRect(this.playerBar.x, this.cpuBar.y , 300, 30);
+	r = r + 0.2;
+	rect1.rotate(Math.PI/180*r, 240, 150);
 }
 
 
