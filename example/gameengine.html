@@ -54,24 +54,41 @@ PingPong.init = function() {
 		
 }
 
+
+var bouncyBall = atgoCircle.extend({
+	construct: function(radius, x, y) {
+		this._super();
+		this.velocity = {
+			x: 0,
+			y: 1
+		}
+		this.radius = radius;
+		this.position.x = x;
+		this.position.y = y;
+		this.gravity = 0.2;
+		this.bounceFactor = 0.7;
+	},
+	update: function() {
+		this._super();
+		this.position.y += this.velocity.y;
+		this.velocity.y += this.gravity;
+		if (this.position.y + this.radius > this.screen.height()) {
+			this.position.y = this.screen.height() - this.radius;
+			this.velocity.y *= -this.bounceFactor;
+		}
+	}
+});
+
 var welcomeScene = SceneManager.createScene();
 
 var rect1 = new atgoRectangle(100, 10, 240, 150);
-var circ1 = new atgoCircle(100, 240, 155);
+var circ1 = new bouncyBall(15, 240, 0);
 
 var r = 0;
 
 welcomeScene.init = function() {
 	this.addObject(circ1);
-
-	this.addObject(rect1);
 }
-
-welcomeScene.update = function() {
-	r = r + 0.2;
-	rect1.rotate(Math.PI/180*r, 240, 150);
-}
-
 
 
 PingPong.create();
