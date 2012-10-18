@@ -1,55 +1,39 @@
 //Game Scene
 
-function Scene(arguments) {
+function atgScene(arguments) {
 	this.screen = arguments.screen;	
+	this.objects = new atgCollection();
 }
 
-Scene.prototype.init = function() {
-	
+atgScene.prototype.init = function() {
 }
 
+atgScene.prototype.updateInternal = function() {
+	this.objects.each(function(obj) {
+		obj.update();
+	});
 
-Scene.prototype.update = function() {
-	
+	this.update();
 }
 
-Scene.prototype.draw = function() {
-	
+atgScene.prototype.draw = function() {
+	this.objects.each(function(obj) {
+		obj.draw();
+	});
 }
 
-//Scene Collection
-
-function SceneCollection() {
-	this.scenes = new Array();		
-}	
-
-SceneCollection.prototype.add = function(scene) {
-	this.count += this.scenes.push(scene);
-	return scene;
+atgScene.prototype.addObject = function(obj) {
+	obj.assignScreen(this.screen);
+	this.objects.add(obj);
 }
 
-SceneCollection.prototype.remove = function(index) {
-	return this.scenes.splice(index, 1);
-}
-
-SceneCollection.prototype.get = function(index) {
-	if (this.scenes.length > index) {
-		return this.scenes[index];
-	} else {
-		return null;
-	}
-} 
-
-SceneCollection.prototype.length = function() {
-	return this.scenes.length;
-}
 
 
 //Scene Manager Singleton
 
 var SceneManager = {
 
-	scenes: new SceneCollection(),
+	scenes: new atgCollection(),
 	currentSceneIndex: -1, //Current Scene Number
 	arguments : null,
 
@@ -75,11 +59,11 @@ var SceneManager = {
 	},
 
 	createScene: function() {
-		return this.scenes.add(new Scene({screen: this.arguments.screen}));
+		return this.scenes.add(new atgScene({screen: this.arguments.screen}));
 	}, 
 
 	updateScene: function() { //Updates Active Scene
-		this.scenes.get(this.currentSceneIndex).update();
+		this.scenes.get(this.currentSceneIndex).updateInternal();
 	}, 
 
 	drawScene: function() { //Draws Active Scene
